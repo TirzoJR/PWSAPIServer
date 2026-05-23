@@ -18,13 +18,11 @@ namespace PWS26Api.Server.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] TbUsuario loginUser)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginUser)
         {
             var responseApi = new ResponsiveAPI<string>();
-
             try
             {
-                // Busca al usuario que coincida con el nombre y contraseña, y que esté activo
                 var dbUsuario = await _dbContext.TbUsuarios.FirstOrDefaultAsync(x =>
                     x.Usuario == loginUser.Usuario &&
                     x.Pass == loginUser.Pass &&
@@ -33,8 +31,6 @@ namespace PWS26Api.Server.Controllers
                 if (dbUsuario != null)
                 {
                     responseApi.EsCorrecto = true;
-                    // En un escenario real aquí devolverías un token JWT. 
-                    // Para este ejercicio devolvemos un mensaje de éxito.
                     responseApi.Valor = "Autenticación exitosa. Bienvenido " + dbUsuario.Usuario;
                 }
                 else

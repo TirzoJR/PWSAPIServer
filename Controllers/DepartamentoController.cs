@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using PWSAPIServer.Models;
 using PWSAPIShare;
 
-
 namespace PWS26Api.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -24,16 +23,19 @@ namespace PWS26Api.Server.Controllers
         {
             var responseApi = new ResponsiveAPI<List<DepartamentoDTO>>();
             var listaDepartamentoDTO = new List<DepartamentoDTO>();
+
             try
             {
-                foreach (var item in await _dbContext.TbEmpleados.Include(d => d.IdDepartamentoNavigation).ToListAsync())
+                // CORRECCIÓN: Ahora consulta la tabla TbDepartamentos
+                foreach (var item in await _dbContext.TbDepartamentos.ToListAsync())
                 {
                     listaDepartamentoDTO.Add(new DepartamentoDTO
                     {
                         IdDepartamento = item.IdDepartamento,
-                        Nombre = item.NombreCompleto,
+                        Nombre = item.Nombre 
                     });
                 }
+
                 responseApi.EsCorrecto = true;
                 responseApi.Valor = listaDepartamentoDTO;
             }
